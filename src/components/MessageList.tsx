@@ -25,7 +25,7 @@ export function MessageList({ logs }: MessageListProps) {
               borderLeft: `4px solid ${isPlayerMessage ? '#2196f3' : '#8bc34a'}`
             }}
           >
-            <div style={{ fontSize: '11px', color: '#666', marginBottom: '4px' }}>
+            <div style={{ fontSize: '11px', color: '#381616ff', marginBottom: '4px' }}>
               {isPlayerMessage ? `Player ${playerId}` : 'DM'}
             </div>
             <div>{message}</div>
