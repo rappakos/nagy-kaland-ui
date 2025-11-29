@@ -4,6 +4,7 @@ import { api } from '../api';
 import { PlayerList } from './PlayerList';
 import { MessageList } from './MessageList';
 import { MessageInput } from './MessageInput';
+import { CharacterSheet } from './CharacterSheet';
 
 interface ChatViewProps {
   gameId: string;
@@ -55,6 +56,7 @@ export function ChatView({ gameId, currentPlayerId }: ChatViewProps) {
         <h2>Game: {gameId}</h2>
         <p>You are: {gameState.players.find(p => p.id === currentPlayerId)?.name || 'Unknown'}</p>
       </div>
+      <CharacterSheet character={gameState.characters[currentPlayerId] || null} />
       <PlayerList players={gameState.players} currentTurnIndex={gameState.turn_index} />
       <MessageList logs={gameState.logs} />
       <MessageInput playerId={currentPlayerId} onSendMessage={handleSendMessage} />
