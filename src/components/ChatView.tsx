@@ -31,18 +31,17 @@ export function ChatView({ gameId, currentPlayerId }: ChatViewProps) {
     loadGame();
   }, [gameId]);
 
-  const handleSendAction = async (type: string, payload: Record<string, any>) => {
+  const handleSendMessage = async (message: string) => {
     if (!gameState) return;
 
     try {
       const updatedState = await api.applyAction(gameId, {
         player_id: currentPlayerId,
-        type,
-        payload,
+        message,
       });
       setGameState(updatedState);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to send action');
+      setError(err instanceof Error ? err.message : 'Failed to send message');
     }
   };
 
@@ -58,7 +57,7 @@ export function ChatView({ gameId, currentPlayerId }: ChatViewProps) {
       </div>
       <PlayerList players={gameState.players} currentTurnIndex={gameState.turn_index} />
       <MessageList logs={gameState.logs} />
-      <MessageInput playerId={currentPlayerId} onSendAction={handleSendAction} />
+      <MessageInput playerId={currentPlayerId} onSendMessage={handleSendMessage} />
     </div>
   );
 }

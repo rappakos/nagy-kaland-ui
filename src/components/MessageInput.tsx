@@ -2,53 +2,31 @@ import { useState } from 'react';
 
 interface MessageInputProps {
   playerId: string;
-  onSendAction: (type: string, payload: Record<string, any>) => void;
+  onSendMessage: (message: string) => void;
 }
 
-export function MessageInput({ playerId, onSendAction }: MessageInputProps) {
-  const [actionType, setActionType] = useState('');
-  const [payloadInput, setPayloadInput] = useState('{}');
+export function MessageInput({ playerId, onSendMessage }: MessageInputProps) {
+  const [message, setMessage] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!actionType.trim()) return;
+    if (!message.trim()) return;
     
-    try {
-      const payload = JSON.parse(payloadInput);
-      onSendAction(actionType, payload);
-      setActionType('');
-      setPayloadInput('{}');
-    } catch (err) {
-      alert('Invalid JSON payload');
-    }
+    onSendMessage(message);
+    setMessage('');
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ padding: '10px', borderTop: '1px solid #ccc' }}>
-      <div style={{ marginBottom: '10px' }}>
-        <label>
-          Action Type:
-          <input
-            type="text"
-            value={actionType}
-            onChange={(e) => setActionType(e.target.value)}
-            placeholder="move, attack, speak..."
-            style={{ marginLeft: '10px', padding: '5px' }}
-          />
-        </label>
-      </div>
-      <div style={{ marginBottom: '10px' }}>
-        <label>
-          Payload (JSON):
-          <textarea
-            value={payloadInput}
-            onChange={(e) => setPayloadInput(e.target.value)}
-            style={{ marginLeft: '10px', padding: '5px', width: '100%', minHeight: '60px' }}
-          />
-        </label>
-      </div>
+    <form onSubmit={handleSubmit} style={{ padding: '10px', borderTop: '1px solid #ccc', display: 'flex', gap: '10px' }}>
+      <input
+        type="text"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder="Type your message..."
+        style={{ flex: 1, padding: '8px' }}
+      />
       <button type="submit" style={{ padding: '8px 16px' }}>
-        Send Action
+        Send
       </button>
     </form>
   );

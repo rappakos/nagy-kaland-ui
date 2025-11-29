@@ -5,8 +5,7 @@ export interface Player {
 
 export interface Action {
   player_id: string;
-  type: string;
-  payload: Record<string, any>;
+  message: string;
 }
 
 export interface Event {
