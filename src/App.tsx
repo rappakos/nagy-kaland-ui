@@ -10,10 +10,12 @@ function App() {
 
   const handleConnect = async (playerNames: string[]) => {
     try {
-      const { game_id } = await api.createGame(playerNames);
+      const { game_id, players } = await api.createGame(playerNames);
       setGameId(game_id);
-      // For MVP: assume first player is the current user
-      setCurrentPlayerId('player_0');
+      // Use the actual first player ID from the response
+      if (players && players.length > 0) {
+        setCurrentPlayerId(players[0].id);
+      }
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Failed to create game');
     }

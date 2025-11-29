@@ -29,4 +29,5 @@ export interface CreateGameRequest {
 
 export interface CreateGameResponse {
   game_id: string;
+  players: Player[];
 }
