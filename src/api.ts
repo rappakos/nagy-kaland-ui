@@ -28,4 +28,26 @@ export const api = {
     if (!response.ok) throw new Error('Failed to apply action');
     return response.json();
   },
+
+  async listCharacters(playerName: string): Promise<{ player_name: string; characters: Array<{ id: string; name: string; class_type: string; level: number; created_at: string }> }> {
+    const response = await fetch(`${API_URL}/characters/${encodeURIComponent(playerName)}`);
+    if (!response.ok) throw new Error('Failed to list characters');
+    return response.json();
+  },
+
+  async getCharacter(playerName: string, characterId: string): Promise<any> {
+    const response = await fetch(`${API_URL}/characters/${encodeURIComponent(playerName)}/${characterId}`);
+    if (!response.ok) throw new Error('Failed to get character');
+    return response.json();
+  },
+
+  async selectCharacter(gameId: string, playerId: string, characterId: string): Promise<any> {
+    const response = await fetch(`${API_URL}/games/${gameId}/select-character/${playerId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ character_id: characterId }),
+    });
+    if (!response.ok) throw new Error('Failed to select character');
+    return response.json();
+  },
 };
