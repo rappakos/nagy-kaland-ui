@@ -50,13 +50,18 @@ export function ChatView({ gameId, currentPlayerId }: ChatViewProps) {
   if (error) return <div style={{ padding: '20px', color: 'red' }}>Error: {error}</div>;
   if (!gameState) return <div style={{ padding: '20px' }}>No game state</div>;
 
+  const currentCharacter = gameState.characters[currentPlayerId] || null;
+
   return (
     <div style={{ display: 'flex', height: '100vh', flexDirection: 'column' }}>
       <div style={{ padding: '10px', borderBottom: '2px solid #333' }}>
         <h2>Game: {gameId}</h2>
         <p>You are: {gameState.players.find(p => p.id === currentPlayerId)?.name || 'Unknown'}</p>
       </div>
-      <CharacterSheet character={gameState.characters[currentPlayerId] || null} />
+      <CharacterSheet 
+        key={currentCharacter ? `${currentCharacter.name}-${currentCharacter.level}-${currentCharacter.experience}` : 'no-char'} 
+        character={currentCharacter} 
+      />
       <PlayerList players={gameState.players} currentTurnIndex={gameState.turn_index} />
       <MessageList logs={gameState.logs} />
       <MessageInput playerId={currentPlayerId} onSendMessage={handleSendMessage} />

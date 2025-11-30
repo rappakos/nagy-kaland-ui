@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import type { Event } from '../types';
 
 interface MessageListProps {
@@ -5,6 +6,16 @@ interface MessageListProps {
 }
 
 export function MessageList({ logs }: MessageListProps) {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [logs]);
+
   return (
     <div style={{ flex: 1, overflowY: 'auto', padding: '10px', border: '1px solid #ccc' }}>
       <h3>Game Log</h3>
@@ -32,6 +43,7 @@ export function MessageList({ logs }: MessageListProps) {
           </div>
         );
       })}
+      <div ref={messagesEndRef} />
     </div>
   );
 }
