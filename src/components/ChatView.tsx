@@ -9,9 +9,10 @@ import { CharacterSheet } from './CharacterSheet';
 interface ChatViewProps {
   gameId: string;
   currentPlayerId: string;
+  onNewGame: () => void;
 }
 
-export function ChatView({ gameId, currentPlayerId }: ChatViewProps) {
+export function ChatView({ gameId, currentPlayerId, onNewGame }: ChatViewProps) {
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -54,9 +55,25 @@ export function ChatView({ gameId, currentPlayerId }: ChatViewProps) {
 
   return (
     <div style={{ display: 'flex', height: '100vh', flexDirection: 'column' }}>
-      <div style={{ padding: '10px', borderBottom: '2px solid #333' }}>
-        <h2>Game: {gameId}</h2>
-        <p>You are: {gameState.players.find(p => p.id === currentPlayerId)?.name || 'Unknown'}</p>
+      <div style={{ padding: '10px', borderBottom: '2px solid #333', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <h2 style={{ margin: '0 0 5px 0' }}>Game: {gameId}</h2>
+          <p style={{ margin: 0 }}>You are: {gameState.players.find(p => p.id === currentPlayerId)?.name || 'Unknown'}</p>
+        </div>
+        <button
+          onClick={onNewGame}
+          style={{
+            padding: '8px 16px',
+            backgroundColor: '#f44336',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '14px',
+          }}
+        >
+          New Game
+        </button>
       </div>
       <CharacterSheet 
         key={currentCharacter ? `${currentCharacter.name}-${currentCharacter.level}-${currentCharacter.experience}` : 'no-char'} 

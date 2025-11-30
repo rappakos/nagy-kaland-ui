@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { api } from './api';
 import { ConnectForm } from './components/ConnectForm';
 import { CharacterSelect } from './components/CharacterSelect';
@@ -12,6 +12,29 @@ function App() {
   const [playerName, setPlayerName] = useState<string>('');
   const [gameId, setGameId] = useState<string | null>(null);
   const [currentPlayerId, setCurrentPlayerId] = useState<string | null>(null);
+
+  // Load saved game session from localStorage on mount
+  useEffect(() => {
+    const savedGameId = localStorage.getItem('gameId');
+    const savedPlayerId = localStorage.getItem('playerId');
+    const savedPlayerName = localStorage.getItem('playerName');
+    
+    if (savedGameId && savedPlayerId && savedPlayerName) {
+      setGameId(savedGameId);
+      setCurrentPlayerId(savedPlayerId);
+      setPlayerName(savedPlayerName);
+      setState('game');
+    }
+  }, []);
+
+  // Save game session to localStorage whenever it changes
+  useEffect(() => {
+    if (gameId && currentPlayerId && playerName) {
+      localStorage.setItem('gameId', gameId);
+      localStorage.setItem('playerId', currentPlayerId);
+      localStorage.setItem('playerName', playerName);
+    }
+  }, [gameId, currentPlayerId, playerName]);
 
   const handleConnect = async (playerNames: string[]) => {
     if (playerNames.length === 0) return;
@@ -49,6 +72,17 @@ function App() {
     setPlayerName('');
   };
 
+  const handleNewGame = () => {
+    // Clear saved game and start fresh
+    localStorage.removeItem('gameId');
+    localStorage.removeItem('playerId');
+    localStorage.removeItem('playerName');
+    setGameId(null);
+    setCurrentPlayerId(null);
+    setPlayerName('');
+    setState('connect');
+  };
+
   if (state === 'connect') {
     return <ConnectForm onConnect={handleConnect} />;
   }
@@ -64,7 +98,7 @@ function App() {
   }
 
   if (state === 'game' && gameId && currentPlayerId) {
-    return <ChatView gameId={gameId} currentPlayerId={currentPlayerId} />;
+    return <ChatView gameId={gameId} currentPlayerId={currentPlayerId} onNewGame={handleNewGame} />;
   }
 
   return null;
